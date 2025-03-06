@@ -235,7 +235,217 @@ Levenshtein Distance: 두 문자열 간의 **최소 변환 횟수**를 계산하
 
 위의 과정에서는 총 3번의 연산이 필요하므로 편집 거리는 3.
 
-
 #### 정규표현식
 특정한 규칙을 가진 문자열을 표현하는 언어로, 복잡한 문자열 검색과 치환에 사용되며, Python에서는 `re` 라이브러리로 처리 가능  
 - 복잡한 패턴을 빠르게 처리할 수 있음
+
+### 전처리 기초 실습
+#### nltk library
+NLTK(Natural Language Toolkit)는 자연어 처리를 위한 파이썬 라이브러리로, 텍스트 전처리, 품사 태깅, 파싱, 말뭉치(Corpus) 처리 등 다양한 기능을 제공함.
+
+---
+
+##### 1. 텍스트 전처리 및 변환
+
+###### 🔹 토큰화 (Tokenization)
+| 함수 | 설명 |
+|------|------|
+| `nltk.word_tokenize(text)` | 문장을 단어 단위로 토큰화 / space와 구두점을 기준으로 토큰화 |
+| `nltk.sent_tokenize(text)` | 문장을 문장 단위로 토큰화 |
+| `nltk.regexp_tokenize(text, pattern)` | 정규 표현식을 사용한 토큰화 |
+| `nltk.tokenize.WordPunctTokenizer().tokenize(text)` | 단어와 구두점을 별도로 분류하는 토크나이저 |
+| `nltk.tokenize.TreebankWordTokenizer().tokenize(text)` | **규칙 1.** 하이픈으로 구성된 단어는 하나로 유지<br>**규칙 2.** 아포스트로피로 '접어'가 함께하는 단어는 분리 |
+
+
+
+
+###### 🔹 정규화 (Normalization)
+| 함수 | 설명 |
+|------|------|
+| `nltk.stem.PorterStemmer().stem(word)` | 포터 스테머(Porter Stemmer)를 사용한 어간 추출 |
+| `nltk.stem.LancasterStemmer().stem(word)` | 랭커스터 스테머(Lancaster Stemmer)를 사용한 어간 추출 |
+| `nltk.stem.SnowballStemmer(language).stem(word)` | 여러 언어를 지원하는 스노우볼 스테머(Snowball Stemmer) |
+| `nltk.WordNetLemmatizer().lemmatize(word, pos)` | 표제어 추출(Lemmatization) |
+
+###### 🔹 불용어 처리 (Stopword Removal)
+| 함수 | 설명 |
+|------|------|
+| `nltk.corpus.stopwords.words('english')` | 불용어 리스트 가져오기 |
+| `nltk.tokenize.RegexpTokenizer(pattern).tokenize(text)` | 특정 패턴을 사용하여 불용어 필터링 가능 |
+
+---
+
+##### 2. 품사 태깅 (Part-of-Speech Tagging)
+| 함수 | 설명 |
+|------|------|
+| `nltk.pos_tag(tokens)` | 단어 리스트에 대해 품사 태깅 수행 |
+| `nltk.help.upenn_tagset(tag)` | 품사 태그의 의미 설명 |
+| `nltk.tag.pos_tag_sents(sentences)` | 여러 문장에 대해 품사 태깅 |
+
+---
+
+##### 3. 구문 분석 (Parsing) 및 문법 처리
+
+###### 🔹 문장 구조 분석 (Parsing)
+| 함수 | 설명 |
+|------|------|
+| `nltk.RegexpParser(grammar).parse(tokens)` | 정규 표현식을 사용한 구문 분석 |
+| `nltk.ChartParser(grammar).parse(tokens)` | 차트 파서를 사용한 문법 분석 |
+| `nltk.EarleyChartParser(grammar).parse(tokens)` | 얼리(Earley) 파서 사용 |
+
+###### 🔹 문법 및 구조 변환
+| 함수 | 설명 |
+|------|------|
+| `nltk.CFG.fromstring(grammar)` | 컨텍스트 자유 문법(CFG) 정의 |
+| `nltk.DependencyGrammar.fromstring(dependency_grammar)` | 의존 문법(Dependency Grammar) 정의 |
+
+---
+
+##### 4. 의미 분석 및 개체명 인식 (NER)
+| 함수 | 설명 |
+|------|------|
+| `nltk.ne_chunk(tagged_tokens)` | 개체명 인식(Named Entity Recognition, NER) 수행 |
+| `nltk.chunk.regexp.RegexpParser(grammar).parse(tagged_tokens)` | 정규식 패턴을 사용한 개체명 인식 |
+
+---
+
+##### 5. 말뭉치(Corpus) 및 데이터 로드
+| 함수 | 설명 |
+|------|------|
+| `nltk.corpus.gutenberg.fileids()` | 구텐베르크 코퍼스의 파일 목록 가져오기 |
+| `nltk.corpus.brown.words()` | 브라운 코퍼스의 단어 가져오기 |
+| `nltk.corpus.stopwords.words('english')` | 불용어 목록 가져오기 |
+| `nltk.corpus.wordnet.synsets(word)` | WordNet에서 동의어(synonyms) 목록 가져오기 |
+
+---
+
+##### 6. 통계 및 언어 모델링
+
+###### 🔹 빈도 분석
+| 함수 | 설명 |
+|------|------|
+| `nltk.FreqDist(tokens)` | 단어 빈도 계산 |
+| `nltk.FreqDist(tokens).most_common(n)` | 가장 자주 등장하는 단어 n개 반환 |
+
+###### 🔹 n-그램 분석
+| 함수 | 설명 |
+|------|------|
+| `nltk.ngrams(sequence, n)` | n-그램 생성 |
+| `nltk.bigrams(sequence)` | 바이그램(bigram) 생성 |
+| `nltk.trigrams(sequence)` | 트라이그램(trigram) 생성 |
+
+###### 🔹 문장 생성 (언어 모델링)
+| 함수 | 설명 |
+|------|------|
+| `nltk.Text(tokens).generate()` | 간단한 언어 모델 기반 문장 생성 |
+
+---
+
+##### 7. 감성 분석 및 문장 유사도 계산
+
+###### 🔹 감성 분석
+| 함수 | 설명 |
+|------|------|
+| `nltk.sentiment.vader.SentimentIntensityAnalyzer().polarity_scores(text)` | 감성 분석 (긍정, 부정, 중립 점수) |
+
+###### 🔹 유사도 및 의미적 거리 측정
+| 함수 | 설명 |
+|------|------|
+| `nltk.edit_distance(str1, str2)` | 문자열 간 편집 거리(Edit Distance) 계산 |
+| `nltk.jaccard_distance(set1, set2)` | 자카드 거리(Jaccard Distance) 계산 |
+
+---
+
+##### 8. 텍스트 시각화
+| 함수 | 설명 |
+|------|------|
+| `nltk.Text(tokens).dispersion_plot(words)` | 특정 단어의 문서 내 분포를 시각화 |
+| `nltk.FreqDist(tokens).plot(n)` | 가장 빈번한 n개의 단어 시각화 |
+
+---
+## 자연어처리의 다양한 응용시스템
+
+### 자연어이해 기반 하위분야
+
+#### 1. 형태소 분석기
+**형태소 분석:** 문자열을 이루는 형태소, 어근, 접두사, 접미사, 품사 등의 구조를 파악하는 과정  
+**품사 태깅:** 형태소 분석 결과에 품사 태그를 할당하는 과정  
+
+- **영어:** 대부분의 형태소가 어절 단위로 구분 가능  
+- **한국어:** 어절 단위로 형태소가 나뉘지 않음  
+
+##### 형태소 분석 방법
+1. **규칙기반 분석**  
+   - 전문가들이 직접 문장을 보고 언어학적 규칙에 따라 형태소를 분석  
+2. **통계기반 분석**  
+   - 모든 가능한 형태소 후보를 생성 후 품사 태깅을 통해 최적의 결과 도출  
+3. **딥러닝 기반 분석**  
+   - 인공 신경망을 이용하여 형태소 분석을 학습 후 진행  
+
+##### 주요 모델
+- **HMM(Hidden Markov Model)**  
+  - 은닉 마르코프 모델을 기반으로 한 형태소 분석  
+  - 문맥 정보 활용에 한계가 있어 성능이 낮을 수 있음  
+- **CRF(Conditional Random Field)**  
+  - 시퀀스 라벨링에 활용, 문맥 정보를 직접 활용하여 성능 향상  
+- **Character-Level BiLSTM-CRF**  
+  - 띄어쓰기 오류 보정을 위해 음절 단위 입력  
+  - BiLSTM 레이어를 거쳐 형태소를 분석  
+
+---
+
+#### 2. 개체명 인식 (NER)
+**정의:** 문장에서 사람의 이름, 날짜, 기관명 등의 개체명을 추출하는 작업  
+
+##### 태깅 시스템
+1. **BIO 시스템**  
+   - `B-` (Begin): 개체명의 시작  
+   - `I-` (Inside): 개체명 중간  
+   - `O-` (Outside): 개체명이 아닌 경우  
+2. **BIESO 시스템**  
+   - `B-` (Begin): 개체명의 시작  
+   - `I-` (Inside): 개체명 중간  
+   - `E-` (End): 개체명의 끝  
+   - `S-` (Singleton): 단일 개체명  
+   - `O-` (Outside): 개체명이 아닌 경우  
+
+##### 활용 사례
+- 의료 분야 개체명 인식 (DrugNER, CHEMDNER)  
+
+---
+
+#### 3. 정보 추출
+**정의:** 비구조적인 문장에서 <주어, 관계, 목적어> 구조의 정보를 추출  
+
+##### 구조
+1. 문서를 문장 단위로 분할  
+2. 토큰화  
+3. 품사 태깅  
+4. 엔티티 추출  
+5. 관계 추출 (서로 가까운 엔티티 간 관계 분석)  
+
+##### 접근 방법
+1. **규칙 기반 접근**  
+   - 사람이 직접 규칙을 정의하여 관계를 추출  
+2. **기계학습 기반 접근**  
+   - 학습된 모델을 활용하여 관계 추출  
+3. **그래프 기반 접근**  
+   - 관계를 그래프로 모델링하여 분석  
+
+---
+
+#### 4. 텍스트 분류
+**정의:** 문장을 입력받아 특정 클래스에 분류하거나 군집화하는 작업  
+
+##### 감성 분석
+- 문장의 감정을 분석하는 자연어처리의 주요 분야  
+- **활용 사례:**  
+  - 영화 리뷰 감성 분석  
+  - 스팸 메일 필터링  
+  - 대화 의도 분류  
+  - 상품 카테고리 분류  
+  - 혐오 표현 탐지  
+
+**의문점**  
+- 비꼬는 말투까지 학습이 가능한가?  
+

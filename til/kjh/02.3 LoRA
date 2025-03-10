@@ -1,0 +1,7 @@
+# Huggingface trainer
+언어모델 학습시 유용하게 사용할 수 있는 huggingface에서 지원하는 trainer 모듈.
+pytorch lightning 기반.
+dataset & model 만 구성해서 넣어주면 많은 부가 인자 옵션들을 쉽게 컨트롤이 가능함.
+
+trainer의 핵심은 compute_metrics의 구현과 TrainingArguments인자에 대한 숙지임.
+다양한 task에 대해서 평가지표 계산을 구현하고, 인자에 어떤 옵션이 있는지 공부하면 모든 task에 범용적으로 쉽게 적용이 가능.
